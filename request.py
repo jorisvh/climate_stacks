@@ -33,6 +33,7 @@ techs = {
 }
 
 companies_per_tech = {}
+company_names = {}
 for tech in techs:
     companies_per_tech[tech] = set()
 
@@ -40,6 +41,7 @@ for company_id in company_ids:
     r = requests.get("https://climatebase.org/company/"+str(company_id))
     soup = BeautifulSoup(r.text, features="html.parser")
     blocklist = ['style', 'script']
+    company_names[company_id] = soup.find("h1").get_text()
     text_elements = [t for t in soup.find_all(text=True) if t.parent.name not in blocklist]
     text = "\n".join(text_elements).lower()
     for tech in techs:
@@ -54,8 +56,8 @@ for company_id in company_ids:
 for tech, companies in companies_per_tech.items():
     body += "<h1>" + str(tech) + "</h1><br />"
     for company_id in companies:
-        body += str(company_id) + "<br />"
+        body += "<a href=\"https://climatebase.org/company/"+str(company_id)+"\">"+company_names[company_id]+"</a>, "
 
 
 
-pdfkit.from_string(body, 'out.pdf')
+pdfkit.from_string(body, 'report.pdf')
