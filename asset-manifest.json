@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/climate_stacks/static/css/main.073c9b0a.css",
+    "main.js": "/climate_stacks/static/js/main.3069c0a4.js",
+    "static/js/787.022afe78.chunk.js": "/climate_stacks/static/js/787.022afe78.chunk.js",
+    "static/media/logo.svg": "/climate_stacks/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/climate_stacks/index.html",
+    "main.073c9b0a.css.map": "/climate_stacks/static/css/main.073c9b0a.css.map",
+    "main.3069c0a4.js.map": "/climate_stacks/static/js/main.3069c0a4.js.map",
+    "787.022afe78.chunk.js.map": "/climate_stacks/static/js/787.022afe78.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.073c9b0a.css",
+    "static/js/main.3069c0a4.js"
+  ]
+}
