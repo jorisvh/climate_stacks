@@ -18,20 +18,33 @@ for sector in sectors:
 techs = {
     "Ruby": ["ruby", "rails", "ror"],
     "Python": ["python", "django"],
-    "Java": ["java"],
-    "Javascript": ["javascript"],
+    "Java": ["java", "spring boot"],
+    "Javascript": ["javascript", "node", "nodejs", "node\.js", "react"],
+    "Typescript": ["typescript"],
     "PHP": ["php"],
     "C": [],
     "C#": ["c#"],
     "C++": ["c\+\+"],
-    "Swift": ["swift"],
-    "Typescript": ["typescript"],
+    "Objective-C": ["objective\-c"],
     "Swift": ["swift"],
     "Kotlin": ["kotlin"],
+    "PostgreSQL": ["postgresql", "postgres", "pgsql"],
+    "MySQL": ["mysql", "mariadb"],
+    "MongoDB": ["mongo", "mongodb"],
+    "Cassandra": ["cassandra"],
+    "Oracle": ["oracle"],
+    "Elasticsearch": ["elasticsearch"],
+    "Redis": ["redis"],
+    "Splunk": ["splunk"],    
+    "Docker": ["docker", "k8s", "kubernetes"],
+    "AWS": ["aws", "amazon web"],
+    "GCP": ["gcp", "google cloud"],
+    "Azure": ["azure"],
+    "Cloudflare": ["cloudflare"]
 }
 
 companies_per_tech = {}
-company_names = {}
+companies = {}
 for tech in techs:
     companies_per_tech[tech] = set()
 
@@ -39,7 +52,9 @@ for company_id in company_ids:
     r = requests.get("https://climatebase.org/company/"+str(company_id))
     soup = BeautifulSoup(r.text, features="html.parser")
     blocklist = ['style', 'script']
-    company_names[company_id] = soup.find("h1").get_text()
+    companies[company_id] = {}
+    companies[company_id]["name"] = soup.find("h1").get_text()
+    companies[company_id]["techs"] = set()
     text_elements = [t for t in soup.find_all(text=True) if t.parent.name not in blocklist]
     text = "\n".join(text_elements).lower()
     for tech in techs:
@@ -47,8 +62,10 @@ for company_id in company_ids:
         for synonym in synonyms:
             if(bool(re.search(r"(?<![a-z])"+synonym+r"(?![a-z])", text))):
                 companies_per_tech[tech].add(company_id)
+                companies[company_id]["techs"].add(tech)
     if(bool(re.search(r"(?<![a-z0-9\-.°&])c(?![a-z0-9&\-\+\)#])", text))): # Avoid Objective-C, C#, C-level, C&I, D.C., C++, c)
         companies_per_tech["C"].add(company_id)
+        companies[company_id]["techs"].add("C")
 
 # Allows to serialize sets to JSON
 def set_default(obj):
@@ -60,5 +77,5 @@ with open('src/companies_per_tech.json', 'w') as outfile:
     json.dump(companies_per_tech, outfile, default=set_default)
 
 with open('src/companies.json', 'w') as outfile:
-    json.dump(company_names, outfile, default=set_default)
+    json.dump(companies, outfile, default=set_default)
     
